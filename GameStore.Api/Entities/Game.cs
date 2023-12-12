@@ -11,7 +11,7 @@ public class Game
     public required string Name { get; set; }
 
     [Required]
-    [StringLength(10)]
+    [StringLength(20)]
     public required string Genre { get; set; }
 
     [Url]
