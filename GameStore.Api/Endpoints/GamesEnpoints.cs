@@ -9,24 +9,24 @@ public static class GamesEnpoints
     public static RouteGroupBuilder MapGamesEndpoints(this IEndpointRouteBuilder routes)
     {
         var group = routes.MapGroup("/games").WithParameterValidation();
-        InMemGamesRepository repository = new();
+        // InMemGamesRepository repository = new();
 
-        group.MapGet("/", () => repository.GetAll());
+        group.MapGet("/", (IGamesRepository repository) => repository.GetAll());
 
-        group.MapGet("/{id}", (int id) =>
+        group.MapGet("/{id}", (IGamesRepository repository, int id) =>
         {
             Game? game = repository.Get(id);
             return game is not null ? Results.Ok(game) : Results.NotFound();
         })
         .WithName(GetGameEnpointName);
 
-        group.MapPost("/", (Game game) =>
+        group.MapPost("/", (IGamesRepository repository, Game game) =>
         {
             repository.Create(game);
             return Results.CreatedAtRoute(GetGameEnpointName, new { id = game.Id }, game);
         });
 
-        group.MapPut("/{id}", (int id, Game updatedGame) =>
+        group.MapPut("/{id}", (IGamesRepository repository, int id, Game updatedGame) =>
         {
             Game? existingGame = repository.Get(id);
             if (existingGame is null)
@@ -42,7 +42,7 @@ public static class GamesEnpoints
             return Results.NoContent();
         });
 
-        group.MapDelete("/{id}", (int id) =>
+        group.MapDelete("/{id}", (IGamesRepository repository, int id) =>
         {
             Game? game = repository.Get(id);
             if (game is not null)
