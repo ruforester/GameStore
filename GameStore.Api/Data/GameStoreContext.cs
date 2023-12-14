@@ -9,7 +9,7 @@ public class GameStoreContext : DbContext
     public GameStoreContext(DbContextOptions<GameStoreContext> options) : base(options)
     {
     }
-    public DbSet<Game> Game => Set<Game>();
+    public DbSet<Game> Games => Set<Game>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
